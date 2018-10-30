@@ -4,13 +4,16 @@
 
 TEMPLATE = app
 TARGET = Qt4HCNetSDKDemo
-DESTDIR = ../Win32/Debug
+DESTDIR = ./Win/bin
 QT += core gui
 CONFIG += debug
 DEFINES += QT_LARGEFILE_SUPPORT QT_DLL
 INCLUDEPATH += ./GeneratedFiles \
     . \
-    ./GeneratedFiles/Debug
+    ./GeneratedFiles/Debug \
+    ./Win/include
+LIBS += -L"./Win/lib" \
+    -lHCNetSDK
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/debug
 OBJECTS_DIR += debug
