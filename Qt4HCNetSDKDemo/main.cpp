@@ -1,5 +1,5 @@
 #include "Qt4HCNetSDKDemo.h"
-#include <QApplication>
+#include <QtGui/QApplication>
 #include <QTextCodec>
 
 int main(int argc, char *argv[])
