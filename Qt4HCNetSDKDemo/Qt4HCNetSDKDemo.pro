@@ -4,16 +4,21 @@
 
 TEMPLATE = app
 TARGET = Qt4HCNetSDKDemo
-DESTDIR = ./Win/bin
+win32:DESTDIR = ./Win/bin
+unix:DESTDIR = ./Linux/bin
 QT += core gui
 CONFIG += debug
 DEFINES += QT_LARGEFILE_SUPPORT QT_DLL
+
 INCLUDEPATH += ./GeneratedFiles \
     . \
-    ./GeneratedFiles/Debug \
-    ./Win/include
-LIBS += -L"./Win/lib" \
-    -lHCNetSDK
+    ./GeneratedFiles/Debug
+win32:INCLUDEPATH += ./Win/include
+unix:INCLUDEPATH += ./Linux/include
+
+win32:LIBS += -L"./Win/lib" -lHCNetSDK
+unix:LIBS += -Wl,-rpath=./:./Linux/bin -lhcnetsdk
+    
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/debug
 OBJECTS_DIR += debug
