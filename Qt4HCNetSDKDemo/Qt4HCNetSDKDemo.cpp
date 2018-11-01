@@ -1,5 +1,4 @@
 #include "Qt4HCNetSDKDemo.h"
-#include "HCNetSDK.h"
 #include <QMessageBox>
 
 Qt4HCNetSDKDemo::Qt4HCNetSDKDemo(QWidget *parent, Qt::WFlags flags)
@@ -7,9 +6,14 @@ Qt4HCNetSDKDemo::Qt4HCNetSDKDemo(QWidget *parent, Qt::WFlags flags)
 {
 	ui.setupUi(this);
 
+	// 初始化标记量
+	m_bInit = FALSE;
+	m_lUserID = -1;
+	m_lRealPlayHandle = -1;
 
 	//AT last need init SDK 
-	if (!NET_DVR_Init())
+	m_bInit = NET_DVR_Init();
+	if (!m_bInit)
 	{
 		QMessageBox::information(this,tr("提示"), \
 			tr("SDK_LAST_ERROR=%1").arg(NET_DVR_GetLastError()));
@@ -17,12 +21,8 @@ Qt4HCNetSDKDemo::Qt4HCNetSDKDemo(QWidget *parent, Qt::WFlags flags)
 
 	NET_DVR_SetConnectTime(10000, 1);
 
-	ui.frameRealPlay->winId();
-
 	//---------------------------------------
 	// 注册设备
-	LONG lUserID;
-
 	//登录参数，包括设备地址、登录用户、密码等
 	NET_DVR_USER_LOGIN_INFO struLoginInfo = {0};
 	struLoginInfo.bUseAsynLogin = 0; //同步登录方式
@@ -34,18 +34,52 @@ Qt4HCNetSDKDemo::Qt4HCNetSDKDemo(QWidget *parent, Qt::WFlags flags)
 	//设备信息, 输出参数
 	NET_DVR_DEVICEINFO_V40 struDeviceInfoV40 = {0};
 
-	lUserID = NET_DVR_Login_V40(&struLoginInfo, &struDeviceInfoV40);
-	if (lUserID < 0)
+	m_lUserID = NET_DVR_Login_V40(&struLoginInfo, &struDeviceInfoV40);
+	if (m_lUserID < 0)
 	{
 		QMessageBox::information(this,tr("提示"), \
 			tr("登录失败，失败原因=%1").arg(NET_DVR_GetLastError()));
 		exit(0);
 	}
+	
+	//---------------------------------------
+	//启动预览并设置回调数据流
+	HWND hWnd = (HWND)ui.frameRealPlay->winId();     //获取窗口句柄
+	NET_DVR_PREVIEWINFO struPlayInfo = {0};
+	struPlayInfo.hPlayWnd = hWnd;         //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
+	struPlayInfo.lChannel     = 1;       //预览通道号
+	struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
+	struPlayInfo.dwLinkMode   = 0;       //0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP
+	struPlayInfo.bBlocked     = 1;       //0- 非阻塞取流，1- 阻塞取流
 
-
+	m_lRealPlayHandle = NET_DVR_RealPlay_V40(m_lUserID, &struPlayInfo, NULL, NULL);
+	if (m_lRealPlayHandle < 0)
+	{
+		printf("NET_DVR_RealPlay_V40 error\n");
+		NET_DVR_Logout(m_lUserID);
+		NET_DVR_Cleanup();
+		return;
+	}
 }
 
 Qt4HCNetSDKDemo::~Qt4HCNetSDKDemo()
 {
-
+	//关闭预览
+	if (m_lRealPlayHandle >= 0)
+	{
+		NET_DVR_StopRealPlay(m_lRealPlayHandle);
+		m_lRealPlayHandle = -1;
+	}
+	//注销用户
+	if (m_lUserID >= 0)
+	{
+		NET_DVR_Logout(m_lUserID);
+		m_lUserID = -1;
+	}
+	//释放SDK资源
+	if (m_bInit)
+	{
+		NET_DVR_Cleanup();
+		m_bInit = FALSE;
+	}
 }
