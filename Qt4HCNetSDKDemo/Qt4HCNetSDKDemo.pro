@@ -4,8 +4,10 @@
 
 TEMPLATE = app
 TARGET = Qt4HCNetSDKDemo
+
 win32:DESTDIR = ./Win/bin
 unix:DESTDIR = ./Linux/bin
+
 QT += core gui
 CONFIG += debug
 DEFINES += QT_LARGEFILE_SUPPORT QT_DLL
