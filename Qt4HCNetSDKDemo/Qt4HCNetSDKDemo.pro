@@ -19,7 +19,7 @@ win32:INCLUDEPATH += ./Win/include
 unix:INCLUDEPATH += ./Linux/include
 
 win32:LIBS += -L"./Win/lib" -lHCNetSDK
-unix:LIBS += -Wl,-rpath=./:./Linux/bin -lhcnetsdk
+unix:LIBS += -L/root/Projects/Qt4HCNetSDKDemo/Qt4HCNetSDKDemo/Linux/bin -Wl,-rpath=./:./HCNetSDKCom:../lib -lhcnetsdk -lhpr -lHCCore
     
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/debug

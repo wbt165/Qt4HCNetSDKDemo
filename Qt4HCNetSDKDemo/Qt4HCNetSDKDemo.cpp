@@ -1,5 +1,6 @@
 #include "Qt4HCNetSDKDemo.h"
 #include <QMessageBox>
+#include <stdio.h>
 
 Qt4HCNetSDKDemo::Qt4HCNetSDKDemo(QWidget *parent, Qt::WFlags flags)
 	: QWidget(parent, flags)
@@ -10,6 +11,8 @@ Qt4HCNetSDKDemo::Qt4HCNetSDKDemo(QWidget *parent, Qt::WFlags flags)
 	m_bInit = FALSE;
 	m_lUserID = -1;
 	m_lRealPlayHandle = -1;
+
+ //   connect(ui.pushButton, SIGNAL(clicked()), this, SLOT(on_pushButton_clicked()));
 
 	//AT last need init SDK 
 	m_bInit = NET_DVR_Init();
@@ -42,24 +45,7 @@ Qt4HCNetSDKDemo::Qt4HCNetSDKDemo(QWidget *parent, Qt::WFlags flags)
 		exit(0);
 	}
 	
-	//---------------------------------------
-	//启动预览并设置回调数据流
-	HWND hWnd = (HWND)ui.frameRealPlay->winId();     //获取窗口句柄
-	NET_DVR_PREVIEWINFO struPlayInfo = {0};
-	struPlayInfo.hPlayWnd = hWnd;         //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
-	struPlayInfo.lChannel     = 1;       //预览通道号
-	struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
-	struPlayInfo.dwLinkMode   = 0;       //0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP
-	struPlayInfo.bBlocked     = 1;       //0- 非阻塞取流，1- 阻塞取流
 
-	m_lRealPlayHandle = NET_DVR_RealPlay_V40(m_lUserID, &struPlayInfo, NULL, NULL);
-	if (m_lRealPlayHandle < 0)
-	{
-		printf("NET_DVR_RealPlay_V40 error\n");
-		NET_DVR_Logout(m_lUserID);
-		NET_DVR_Cleanup();
-		return;
-	}
 }
 
 Qt4HCNetSDKDemo::~Qt4HCNetSDKDemo()
@@ -82,4 +68,25 @@ Qt4HCNetSDKDemo::~Qt4HCNetSDKDemo()
 		NET_DVR_Cleanup();
 		m_bInit = FALSE;
 	}
+}
+
+void Qt4HCNetSDKDemo::on_pushButton_clicked()
+{//---------------------------------------
+    //启动预览并设置回调数据流
+    HWND hWnd = (HWND)ui.frameRealPlay->winId();     //获取窗口句柄
+    NET_DVR_PREVIEWINFO struPlayInfo = {0};
+    struPlayInfo.hPlayWnd = hWnd;         //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
+    struPlayInfo.lChannel     = 1;       //预览通道号
+    struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
+    struPlayInfo.dwLinkMode   = 0;       //0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP
+    struPlayInfo.bBlocked     = 1;       //0- 非阻塞取流，1- 阻塞取流
+
+    m_lRealPlayHandle = NET_DVR_RealPlay_V40(m_lUserID, &struPlayInfo, NULL, NULL);
+    if (m_lRealPlayHandle < 0)
+    {
+        printf("NET_DVR_RealPlay_V40 error\n");
+        NET_DVR_Logout(m_lUserID);
+        NET_DVR_Cleanup();
+        return;
+    }
 }

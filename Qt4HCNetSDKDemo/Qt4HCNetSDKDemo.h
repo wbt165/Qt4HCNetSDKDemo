@@ -13,6 +13,9 @@ public:
 	Qt4HCNetSDKDemo(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Qt4HCNetSDKDemo();
 
+private slots:
+    void on_pushButton_clicked();
+
 private:
 	Ui::Qt4HCNetSDKDemoClass ui;
 	//初始化完成标记
