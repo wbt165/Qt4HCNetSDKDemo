@@ -10,11 +10,7 @@ Qt4HCNetSDKDemo::Qt4HCNetSDKDemo(QWidget *parent, Qt::WFlags flags)
 	// 初始化标记量
 	m_bInit = FALSE;
 	m_lUserID = -1;
-	m_lRealPlayHandle = -1;
-    show();
-
-    NET_DVR_Cleanup();
- //   connect(ui.pushButton, SIGNAL(clicked()), this, SLOT(on_pushButton_clicked()));
+    m_lRealPlayHandle = -1;
 
 	//AT last need init SDK 
 	m_bInit = NET_DVR_Init();
