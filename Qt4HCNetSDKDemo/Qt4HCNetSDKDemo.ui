@@ -14,8 +14,8 @@
    <string>Qt4HCNetSDKDemo</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QFrame" name="frameRealPlay">
+   <item row="1" column="0">
+    <widget class="QFrame" name="frame2">
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -24,7 +24,37 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="1" column="1">
+    <widget class="QFrame" name="frame3">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QFrame" name="frame1">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QFrame" name="frame0">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
     <widget class="QPushButton" name="pushButton">
      <property name="text">
       <string>PushButton</string>
@@ -34,8 +64,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="Qt4HCNetSDKDemo.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
