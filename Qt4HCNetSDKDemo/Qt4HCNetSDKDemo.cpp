@@ -27,10 +27,10 @@ Qt4HCNetSDKDemo::Qt4HCNetSDKDemo(QWidget *parent, Qt::WFlags flags)
 	//登录参数，包括设备地址、登录用户、密码等
 	NET_DVR_USER_LOGIN_INFO struLoginInfo = {0};
 	struLoginInfo.bUseAsynLogin = 0; //同步登录方式
-    strcpy(struLoginInfo.sDeviceAddress, "192.168.100.213"); //设备IP地址
+    strcpy(struLoginInfo.sDeviceAddress, "192.168.1.64"); //设备IP地址
 	struLoginInfo.wPort = 8000; //设备服务端口
 	strcpy(struLoginInfo.sUserName, "admin"); //设备登录用户名
-    strcpy(struLoginInfo.sPassword, "12345"); //设备登录密码
+    strcpy(struLoginInfo.sPassword, "98765432i"); //设备登录密码
 
 	//设备信息, 输出参数
 	NET_DVR_DEVICEINFO_V40 struDeviceInfoV40 = {0};
@@ -71,9 +71,11 @@ Qt4HCNetSDKDemo::~Qt4HCNetSDKDemo()
 
 void Qt4HCNetSDKDemo::on_pushButton_clicked()
 {
-    HWND hWnd = (HWND)ui.frame0->winId();     //获取窗口句柄
+//	HWND hWnd = (HWND)ui.frame0->winId();     //获取窗口句柄
+	HWND hWnd = (HWND)this->winId();     //获取窗口句柄
     printf("frame0.hWnd=0x%x\n", hWnd);
-    NET_DVR_PREVIEWINFO struPlayInfo = {0};
+	NET_DVR_PREVIEWINFO struPlayInfo;
+	memset(&struPlayInfo, 0, sizeof(NET_DVR_PREVIEWINFO));
     struPlayInfo.hPlayWnd = hWnd;         //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
     struPlayInfo.lChannel     = 1;       //预览通道号
     struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
@@ -88,10 +90,10 @@ void Qt4HCNetSDKDemo::on_pushButton_clicked()
         NET_DVR_Cleanup();
         return;
     }
-
+/*
     hWnd = (HWND)ui.frame1->winId();     //获取窗口句柄
     printf("frame1.hWnd=0x%x\n", hWnd);
-    struPlayInfo = {0};
+	memset(&struPlayInfo, 0, sizeof(NET_DVR_PREVIEWINFO));
     struPlayInfo.hPlayWnd = hWnd;         //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
     struPlayInfo.lChannel     = 2;       //预览通道号
     struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
@@ -108,8 +110,8 @@ void Qt4HCNetSDKDemo::on_pushButton_clicked()
     }
 
     hWnd = (HWND)ui.frame2->winId();     //获取窗口句柄
-    printf("frame2.hWnd=0x%x\n", hWnd);
-    struPlayInfo = {0};
+	printf("frame2.hWnd=0x%x\n", hWnd);
+	memset(&struPlayInfo, 0, sizeof(NET_DVR_PREVIEWINFO));
     struPlayInfo.hPlayWnd = hWnd;         //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
     struPlayInfo.lChannel     = 3;       //预览通道号
     struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
@@ -126,8 +128,8 @@ void Qt4HCNetSDKDemo::on_pushButton_clicked()
     }
 
     hWnd = (HWND)ui.frame3->winId();     //获取窗口句柄
-    printf("frame3.hWnd=0x%x\n", hWnd);
-    struPlayInfo = {0};
+	printf("frame3.hWnd=0x%x\n", hWnd);
+	memset(&struPlayInfo, 0, sizeof(NET_DVR_PREVIEWINFO));
     struPlayInfo.hPlayWnd = hWnd;         //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
     struPlayInfo.lChannel     = 4;       //预览通道号
     struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
@@ -142,4 +144,5 @@ void Qt4HCNetSDKDemo::on_pushButton_clicked()
         NET_DVR_Cleanup();
         return;
     }
+*/
 }
